@@ -1,0 +1,132 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { EventCard } from "@/components/EventCard";
+import { MonthNavigator } from "@/components/MonthNavigator";
+import { ScheduleHeader } from "@/components/ScheduleHeader";
+import type { CelebrityProfile, ScheduleEvent } from "@/types/schedule";
+import { groupEventsByDate, parseEventDate } from "@/utils/eventDate";
+
+type ScheduleViewProps = {
+  profile: CelebrityProfile;
+  events: ScheduleEvent[];
+};
+
+function monthKey(date: Date) {
+  return `${date.getFullYear()}-${date.getMonth()}`;
+}
+
+function formatMonthLabel(date: Date) {
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+}
+
+function isSameMonth(a: Date, b: Date) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
+}
+
+function sortEventsForMonth(
+  monthEvents: ScheduleEvent[],
+  viewedMonth: Date,
+) {
+  const today = new Date();
+  const viewingCurrentMonth = isSameMonth(viewedMonth, today);
+
+  const sorted = [...monthEvents].sort(
+    (a, b) => parseEventDate(a.date).getTime() - parseEventDate(b.date).getTime(),
+  );
+
+  if (!viewingCurrentMonth) {
+    return sorted;
+  }
+
+  const todayStart = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+  ).getTime();
+
+  const upcoming: ScheduleEvent[] = [];
+  const past: ScheduleEvent[] = [];
+
+  for (const event of sorted) {
+    if (parseEventDate(event.date).getTime() < todayStart) {
+      past.push(event);
+    } else {
+      upcoming.push(event);
+    }
+  }
+
+  return [...upcoming, ...past];
+}
+
+export function ScheduleView({ profile, events }: ScheduleViewProps) {
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), 1);
+  });
+
+  const monthsWithEvents = useMemo(() => {
+    const keys = new Set<string>();
+    for (const event of events) {
+      const date = new Date(`${event.date}T12:00:00`);
+      keys.add(monthKey(date));
+    }
+    return keys;
+  }, [events]);
+
+  const dayGroups = useMemo(() => {
+    const key = monthKey(currentMonth);
+    const monthEvents = events.filter(
+      (event) => monthKey(parseEventDate(event.date)) === key,
+    );
+    return groupEventsByDate(sortEventsForMonth(monthEvents, currentMonth));
+  }, [events, currentMonth]);
+
+  return (
+    <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-10">
+      <ScheduleHeader profile={profile} />
+
+      <div className="mt-6 flex flex-col items-center gap-8 sm:mt-7 lg:mt-8 lg:flex-row lg:items-center lg:justify-center lg:gap-10 xl:gap-16">
+        <div className="flex shrink-0 justify-center">
+          <MonthNavigator
+            label={formatMonthLabel(currentMonth)}
+            selected={currentMonth}
+            monthsWithEvents={monthsWithEvents}
+            onMonthSelect={setCurrentMonth}
+            onPrevious={() => {
+              setCurrentMonth(
+                (prev) =>
+                  new Date(prev.getFullYear(), prev.getMonth() - 1, 1),
+              );
+            }}
+            onNext={() => {
+              setCurrentMonth(
+                (prev) =>
+                  new Date(prev.getFullYear(), prev.getMonth() + 1, 1),
+              );
+            }}
+          />
+        </div>
+
+        <section
+          className="mx-auto w-full max-w-[652px] space-y-3 sm:max-w-[652px] lg:max-w-[748px] xl:max-w-[876px]"
+          aria-label="Event schedule"
+        >
+          {dayGroups.length > 0 ? (
+            dayGroups.map((group) => (
+              <EventCard
+                key={group.date}
+                date={group.date}
+                events={group.events}
+              />
+            ))
+          ) : (
+            <p className="glass-empty rounded-3xl py-12 text-center text-white/70">
+              No events scheduled for this month.
+            </p>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}
