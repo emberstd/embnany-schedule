@@ -76,6 +76,58 @@ export function getRichTextWithLink(prop: PropertyValue | undefined): {
   return { text, url };
 }
 
+const DEFAULT_TIMEZONE =
+  process.env.NOTION_TIMEZONE?.trim() || "Asia/Bangkok";
+
+function formatTime12h(hour24: number, minute: number): string {
+  const period = hour24 >= 12 ? "PM" : "AM";
+  let hour12 = hour24 % 12;
+  if (hour12 === 0) hour12 = 12;
+  return `${hour12}:${String(minute).padStart(2, "0")} ${period}`;
+}
+
+/**
+ * Notion date.start includes the wall-clock time the user entered (often with +08:00).
+ * Parse it literally instead of using the server timezone (Vercel runs in UTC).
+ */
+function parseNotionDateStart(start: string): { date: string; time: string } {
+  const dateOnly = start.match(/^(\d{4}-\d{2}-\d{2})$/);
+  if (dateOnly) {
+    return { date: dateOnly[1], time: "TBA" };
+  }
+
+  const withTime = start.match(
+    /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?$/,
+  );
+
+  if (!withTime) {
+    return { date: start.slice(0, 10), time: "TBA" };
+  }
+
+  const [, date, hh, mm, zone] = withTime;
+  const hour = Number.parseInt(hh, 10);
+  const minute = Number.parseInt(mm, 10);
+
+  if (!zone || zone !== "Z") {
+    return { date, time: formatTime12h(hour, minute) };
+  }
+
+  const parsed = new Date(start);
+  if (Number.isNaN(parsed.getTime())) {
+    return { date, time: "TBA" };
+  }
+
+  return {
+    date: parsed.toLocaleDateString("en-CA", { timeZone: DEFAULT_TIMEZONE }),
+    time: parsed.toLocaleTimeString("en-US", {
+      timeZone: DEFAULT_TIMEZONE,
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }),
+  };
+}
+
 export function getDateAndTime(prop: PropertyValue | undefined): {
   date?: string;
   time: string;
@@ -84,25 +136,7 @@ export function getDateAndTime(prop: PropertyValue | undefined): {
     return { time: "TBA" };
   }
 
-  const start = prop.date.start;
-  const date = start.slice(0, 10);
-
-  if (!start.includes("T")) {
-    return { date, time: "TBA" };
-  }
-
-  const parsed = new Date(start);
-  if (Number.isNaN(parsed.getTime())) {
-    return { date, time: "TBA" };
-  }
-
-  const time = parsed.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-
-  return { date, time };
+  return parseNotionDateStart(prop.date.start);
 }
 
 export function getUrl(prop: PropertyValue | undefined): string | undefined {
