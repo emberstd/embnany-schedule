@@ -4,6 +4,9 @@ import {
   isNotionConfigured,
 } from "@/lib/notion/getScheduleEvents";
 
+/** Always read live env + Notion data (not static at build time). */
+export const dynamic = "force-dynamic";
+
 /**
  * Optional JSON API for debugging or client fetch.
  * Token stays on the server — safe for production.

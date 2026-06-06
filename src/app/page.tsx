@@ -7,6 +7,9 @@ import {
   isNotionConfigured,
 } from "@/lib/notion/getScheduleEvents";
 
+/** Always fetch fresh Notion data (avoid build-time mock cache on Vercel). */
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   let events = mockEvents;
   let dataSource: "notion" | "mock" = "mock";
