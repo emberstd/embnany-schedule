@@ -3,11 +3,24 @@ import { mapNotionPageToEvent } from "@/lib/notion/mapPageToEvent";
 import { notionPropertyNames } from "@/lib/notion/propertyConfig";
 import type { ScheduleEvent } from "@/types/schedule";
 
-function isConfigured() {
-  return Boolean(
-    process.env.NOTION_API_KEY?.trim() &&
-      process.env.NOTION_DATABASE_ID?.trim(),
+function readEnv(name: string) {
+  return process.env[name]?.trim().replace(/^["']+|["']+$/g, "") ?? "";
+}
+
+function isPlaceholderValue(value: string) {
+  return (
+    !value ||
+    value.includes("your_notion") ||
+    value.includes("your_32_char") ||
+    value === "your_notion_integration_secret_here" ||
+    value === "your_32_char_database_id_here"
   );
+}
+
+function isConfigured() {
+  const apiKey = readEnv("NOTION_API_KEY");
+  const databaseId = readEnv("NOTION_DATABASE_ID");
+  return Boolean(apiKey && databaseId && !isPlaceholderValue(apiKey) && !isPlaceholderValue(databaseId));
 }
 
 /** Notion accepts UUID with hyphens; users often copy 32-char id without them. */
@@ -20,7 +33,7 @@ function normalizeNotionId(id: string): string {
 }
 
 function createNotionClient() {
-  return new Client({ auth: process.env.NOTION_API_KEY });
+  return new Client({ auth: readEnv("NOTION_API_KEY") });
 }
 
 async function resolveDataSourceId(
@@ -60,7 +73,7 @@ export async function getScheduleEventsFromNotion(): Promise<ScheduleEvent[]> {
   }
 
   const notion = createNotionClient();
-  const databaseId = normalizeNotionId(process.env.NOTION_DATABASE_ID!.trim());
+  const databaseId = normalizeNotionId(readEnv("NOTION_DATABASE_ID"));
   const dataSourceId = await resolveDataSourceId(notion, databaseId);
   const events: ScheduleEvent[] = [];
   let cursor: string | undefined;

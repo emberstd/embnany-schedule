@@ -18,7 +18,7 @@ export async function GET() {
         configured: false,
         events: [],
         message:
-          "Set NOTION_API_KEY and NOTION_DATABASE_ID in .env.local",
+          "Set NOTION_API_KEY and NOTION_DATABASE_ID in Vercel Environment Variables (Production), then Redeploy.",
       },
       { status: 200 },
     );
@@ -26,7 +26,11 @@ export async function GET() {
 
   try {
     const events = await getScheduleEventsFromNotion();
-    return NextResponse.json({ configured: true, events });
+    return NextResponse.json({
+      configured: true,
+      eventCount: events.length,
+      events,
+    });
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Notion request failed";
