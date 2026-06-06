@@ -86,8 +86,8 @@ export function ScheduleView({ profile, events }: ScheduleViewProps) {
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-10">
       <ScheduleHeader profile={profile} />
 
-      <div className="mt-6 flex flex-col items-center gap-8 sm:mt-7 lg:mt-8 lg:flex-row lg:items-center lg:justify-center lg:gap-10 xl:gap-16">
-        <div className="flex shrink-0 justify-center">
+      <div className="mt-6 flex w-full flex-col items-center gap-8 sm:mt-7 lg:mt-8">
+        <div className="flex w-full max-w-[630px] shrink-0 justify-center">
           <MonthNavigator
             label={formatMonthLabel(currentMonth)}
             selected={currentMonth}
@@ -109,7 +109,7 @@ export function ScheduleView({ profile, events }: ScheduleViewProps) {
         </div>
 
         <section
-          className="mx-auto w-full max-w-[630px] space-y-3"
+          className="w-full max-w-[630px] space-y-3"
           aria-label="Event schedule"
         >
           {dayGroups.length > 0 ? (
