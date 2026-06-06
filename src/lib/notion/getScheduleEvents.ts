@@ -3,8 +3,21 @@ import { mapNotionPageToEvent } from "@/lib/notion/mapPageToEvent";
 import { notionPropertyNames } from "@/lib/notion/propertyConfig";
 import type { ScheduleEvent } from "@/types/schedule";
 
+function sanitizeEnvValue(value: string): string {
+  let trimmed = value.trim();
+  while (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+  ) {
+    trimmed = trimmed.slice(1, -1).trim();
+  }
+  return trimmed;
+}
+
 function readEnv(name: string) {
-  return process.env[name]?.trim().replace(/^["']+|["']+$/g, "") ?? "";
+  const raw = process.env[name];
+  if (!raw) return "";
+  return sanitizeEnvValue(raw);
 }
 
 function isPlaceholderValue(value: string) {
@@ -23,9 +36,8 @@ function isConfigured() {
   return Boolean(apiKey && databaseId && !isPlaceholderValue(apiKey) && !isPlaceholderValue(databaseId));
 }
 
-/** Notion accepts UUID with hyphens; users often copy 32-char id without them. */
 function normalizeNotionId(id: string): string {
-  const trimmed = id.trim().replace(/^["']+|["']+$/g, "");
+  const trimmed = sanitizeEnvValue(id);
   if (trimmed.includes("-")) return trimmed;
   const hex = trimmed.replace(/[^a-fA-F0-9]/g, "");
   if (hex.length !== 32) return trimmed;
