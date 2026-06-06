@@ -124,7 +124,7 @@ export function getGuests(prop: PropertyValue | undefined): string[] {
 
   if (prop.type === "people") {
     return prop.people
-      .map((person) => person.name?.trim())
+      .map((person) => ("name" in person ? person.name?.trim() : undefined))
       .filter((name): name is string => Boolean(name));
   }
 

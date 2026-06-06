@@ -26,13 +26,15 @@ export default async function Home() {
   return (
     <>
       <VideoBackground />
-      <main className="relative flex min-h-full flex-1 flex-col">
-        {dataSource === "mock" && isNotionConfigured() && (
-          <p className="sr-only">
-            Notion connected but no events returned; showing mock data.
-          </p>
-        )}
-        <ScheduleView profile={profile} events={events} />
+      <main className="relative flex min-h-dvh flex-col">
+        <div className="flex-1">
+          {dataSource === "mock" && isNotionConfigured() && (
+            <p className="sr-only">
+              Notion connected but no events returned; showing mock data.
+            </p>
+          )}
+          <ScheduleView profile={profile} events={events} />
+        </div>
         <SiteFooter />
       </main>
     </>
