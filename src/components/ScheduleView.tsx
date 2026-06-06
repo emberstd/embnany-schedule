@@ -109,7 +109,7 @@ export function ScheduleView({ profile, events }: ScheduleViewProps) {
         </div>
 
         <section
-          className="mx-auto w-full max-w-[652px] space-y-3 sm:max-w-[652px] lg:max-w-[748px] xl:max-w-[876px]"
+          className="mx-auto w-full max-w-[630px] space-y-3"
           aria-label="Event schedule"
         >
           {dayGroups.length > 0 ? (
