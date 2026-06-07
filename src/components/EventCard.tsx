@@ -19,7 +19,7 @@ type EventCardProps = {
 const INFO_ICON_CLASS = "h-4 w-4 shrink-0";
 
 const HASHTAG_PILL_CLASS =
-  "inline-flex items-center rounded-full border border-white/35 px-3.5 py-1 text-sm font-medium text-white/90";
+  "inline-flex items-center rounded-full border border-white/35 px-3 py-0.5 text-xs font-medium text-white/90";
 
 function splitHashtagTags(raw: string): string[] {
   return raw
@@ -90,7 +90,7 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
       {showTrendingSection ? (
         <div className="mt-2 space-y-1">
           {trendingKeyword ? (
-            <div className="flex items-center gap-2 text-sm leading-snug text-white/80">
+            <div className="flex items-center gap-2 text-xs leading-snug text-white/80">
               <TrendingKeywordIcon
                 className={`${INFO_ICON_CLASS} object-contain`}
               />
@@ -99,9 +99,9 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
           ) : null}
 
             {hashtag ? (
-              <div className="flex items-center gap-2 text-sm leading-snug text-white/80">
+              <div className="flex items-start gap-2 text-xs leading-snug text-white/80">
                 <TagHashtagIcon
-                  className={`${INFO_ICON_CLASS} object-contain`}
+                  className={`${INFO_ICON_CLASS} mt-0.5 object-contain`}
                 />
                 <div className="flex min-w-0 flex-wrap gap-1.5">
                   {splitHashtagTags(hashtag).map((tag, index) =>
