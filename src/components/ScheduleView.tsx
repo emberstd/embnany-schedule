@@ -82,30 +82,38 @@ export function ScheduleView({ profile, events }: ScheduleViewProps) {
     return groupEventsByDate(sortEventsForMonth(monthEvents, currentMonth));
   }, [events, currentMonth]);
 
+  function scrollToMonthStart() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function shiftMonth(delta: number) {
+    setCurrentMonth(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + delta, 1),
+    );
+    scrollToMonthStart();
+  }
+
+  function selectMonth(date: Date) {
+    setCurrentMonth(date);
+    scrollToMonthStart();
+  }
+
+  const monthNavProps = {
+    label: formatMonthLabel(currentMonth),
+    selected: currentMonth,
+    monthsWithEvents,
+    onMonthSelect: selectMonth,
+    onPrevious: () => shiftMonth(-1),
+    onNext: () => shiftMonth(1),
+  };
+
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-10">
       <ScheduleHeader profile={profile} />
 
       <div className="mt-6 flex w-full flex-col items-center gap-8 sm:mt-7 lg:mt-8">
-        <div className="flex w-full max-w-[630px] shrink-0 justify-center">
-          <MonthNavigator
-            label={formatMonthLabel(currentMonth)}
-            selected={currentMonth}
-            monthsWithEvents={monthsWithEvents}
-            onMonthSelect={setCurrentMonth}
-            onPrevious={() => {
-              setCurrentMonth(
-                (prev) =>
-                  new Date(prev.getFullYear(), prev.getMonth() - 1, 1),
-              );
-            }}
-            onNext={() => {
-              setCurrentMonth(
-                (prev) =>
-                  new Date(prev.getFullYear(), prev.getMonth() + 1, 1),
-              );
-            }}
-          />
+        <div className="sticky top-3 z-30 flex w-full max-w-[630px] shrink-0 justify-center py-2 sm:top-4">
+          <MonthNavigator {...monthNavProps} />
         </div>
 
         <section
