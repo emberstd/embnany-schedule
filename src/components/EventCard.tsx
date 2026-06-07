@@ -19,7 +19,14 @@ type EventCardProps = {
 const INFO_ICON_CLASS = "h-4 w-4 shrink-0";
 
 const HASHTAG_PILL_CLASS =
-  "inline-flex items-center rounded-full border border-white/35 px-3 py-0.5 text-xs font-medium text-white/90";
+  "inline-flex items-center rounded-full border border-white/35 px-3.5 py-1 text-sm font-medium text-white/90";
+
+function splitHashtagTags(raw: string): string[] {
+  return raw
+    .split(/\s*\/\s*/)
+    .map((tag) => tag.trim().replace(/^#/, ""))
+    .filter(Boolean);
+}
 
 function formatDateParts(isoDate: string) {
   const date = new Date(`${isoDate}T12:00:00`);
@@ -48,7 +55,7 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
 
   return (
     <div className="min-w-0">
-      <h2 className="text-base font-bold uppercase leading-tight tracking-wide text-white drop-shadow-sm sm:text-lg">
+      <h2 className="text-left text-base font-bold uppercase leading-tight tracking-wide text-white drop-shadow-sm sm:text-lg">
         {event.title}
       </h2>
 
@@ -58,17 +65,17 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
           <span>{event.time}</span>
         </div>
 
+        <div className="flex items-center gap-2 text-sm leading-snug text-white/85">
+          <MapPinIcon className={`${INFO_ICON_CLASS} text-white/70`} />
+          <p className="min-w-0">{locationContent}</p>
+        </div>
+
         {event.guests.length > 0 ? (
           <div className="flex items-center gap-2 text-sm leading-snug text-white/75">
             <UsersIcon className={`${INFO_ICON_CLASS} text-white/60`} />
             <p className="min-w-0">{event.guests.join(" / ")}</p>
           </div>
         ) : null}
-
-        <div className="flex items-center gap-2 text-sm leading-snug text-white/85">
-          <MapPinIcon className={`${INFO_ICON_CLASS} text-white/70`} />
-          <p className="min-w-0">{locationContent}</p>
-        </div>
       </div>
 
       <a
@@ -96,20 +103,25 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
                 <TagHashtagIcon
                   className={`${INFO_ICON_CLASS} object-contain`}
                 />
-                {event.hashtagUrl ? (
-                  <a
-                    href={event.hashtagUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${HASHTAG_PILL_CLASS} transition hover:border-white/55 hover:bg-white/10`}
-                  >
-                    {hashtag.replace(/^#/, "")}
-                  </a>
-                ) : (
-                  <span className={HASHTAG_PILL_CLASS}>
-                    {hashtag.replace(/^#/, "")}
-                  </span>
-                )}
+                <div className="flex min-w-0 flex-wrap gap-1.5">
+                  {splitHashtagTags(hashtag).map((tag, index) =>
+                    event.hashtagUrl ? (
+                      <a
+                        key={`${tag}-${index}`}
+                        href={event.hashtagUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${HASHTAG_PILL_CLASS} transition hover:border-white/55 hover:bg-white/10`}
+                      >
+                        {tag}
+                      </a>
+                    ) : (
+                      <span key={`${tag}-${index}`} className={HASHTAG_PILL_CLASS}>
+                        {tag}
+                      </span>
+                    ),
+                  )}
+                </div>
               </div>
             ) : null}
         </div>

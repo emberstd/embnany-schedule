@@ -59,7 +59,7 @@ export function TrendingKeywordIcon({ className }: IconProps) {
     <img
       src="/icons/trending-keyword.png"
       alt=""
-      className={className}
+      className={`mix-blend-screen ${className ?? ""}`}
       aria-hidden
       draggable={false}
     />
