@@ -73,7 +73,7 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
         {event.guests.length > 0 ? (
           <div className="flex items-start gap-2 text-sm leading-snug text-white/75">
             <UsersIcon className={`${INFO_ICON_CLASS} mt-0.5 text-white/60`} />
-            <p className="min-w-0">{event.guests.join(" / ")}</p>
+            <p className="min-w-0 uppercase">{event.guests.join(" / ")}</p>
           </div>
         ) : null}
       </div>
