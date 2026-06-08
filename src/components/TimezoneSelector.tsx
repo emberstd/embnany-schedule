@@ -1,17 +1,24 @@
 "use client";
 
 import Image from "next/image";
+import { useMemo, useState } from "react";
 import { usePreferredTimezone } from "@/contexts/PreferredTimezoneContext";
+import { useNavigatorLocale } from "@/hooks/useNavigatorLocale";
 import {
   getEffectiveTimezoneLabel,
   STANDARD_TIMEZONE_OPTIONS,
 } from "@/utils/preferredTimezone";
-import { useState } from "react";
+import { getTimezoneSelectorMessages } from "@/utils/timezoneSelectorI18n";
 
 export function TimezoneSelector() {
   const { preferredTimeZone, effectiveTimeZone, setPreferredTimeZone } =
     usePreferredTimezone();
   const [open, setOpen] = useState(false);
+  const locale = useNavigatorLocale();
+  const messages = useMemo(
+    () => getTimezoneSelectorMessages(locale),
+    [locale],
+  );
 
   const currentLabel = getEffectiveTimezoneLabel(
     preferredTimeZone,
@@ -26,8 +33,8 @@ export function TimezoneSelector() {
         className="region-glass-button flex h-11 w-11 items-center justify-center rounded-full"
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-label="选择时区"
-        title="选择时区"
+        aria-label={messages.selectTimezone}
+        title={messages.selectTimezone}
       >
         <Image
           src="/icons/region-selector.png"
@@ -44,12 +51,12 @@ export function TimezoneSelector() {
           <button
             type="button"
             className="glass-popover-backdrop fixed inset-0 z-40 cursor-default"
-            aria-label="关闭时区选择"
+            aria-label={messages.closePicker}
             onClick={() => setOpen(false)}
           />
           <div
             role="listbox"
-            aria-label="时区"
+            aria-label={messages.timezoneList}
             className="glass-popover absolute top-full right-0 z-50 mt-3 flex w-[min(100vw-2rem,17.5rem)] flex-col overflow-hidden rounded-2xl"
           >
             <div className="max-h-[min(70vh,26rem)] overflow-y-auto p-2">
@@ -65,7 +72,7 @@ export function TimezoneSelector() {
                   preferredTimeZone === null ? " is-selected" : ""
                 }`}
               >
-                自动
+                {messages.auto}
                 <span className="mt-0.5 block text-xs text-white/60">
                   {effectiveTimeZone.replace(/_/g, " ")}
                 </span>
@@ -92,7 +99,7 @@ export function TimezoneSelector() {
 
             {preferredTimeZone && (
               <div className="border-t border-white/12 px-3 py-2 text-center text-[11px] text-white/50">
-                当前：{currentLabel}
+                {messages.current}: {currentLabel}
               </div>
             )}
           </div>
