@@ -1,5 +1,6 @@
 import { ScheduleView } from "@/components/ScheduleView";
 import { SiteFooter } from "@/components/SiteFooter";
+import { TimezoneSelector } from "@/components/TimezoneSelector";
 import { VideoBackground } from "@/components/VideoBackground";
 import { events as mockEvents, profile } from "@/data/mockSchedule";
 import {
@@ -28,6 +29,7 @@ export default async function Home() {
   return (
     <>
       <VideoBackground />
+      <TimezoneSelector />
       <main className="relative flex min-h-dvh flex-col">
         <div className="flex-1">
           {notionConfigured && events.length === 0 && (

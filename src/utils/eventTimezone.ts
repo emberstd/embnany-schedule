@@ -1,19 +1,32 @@
-const DEFAULT_EVENT_TIMEZONE =
-  process.env.NOTION_TIMEZONE?.trim() || "Asia/Shanghai";
+/**
+ * Event time pipeline:
+ * 1. Read flag emoji at the start of Title → event timezone (capital / major city).
+ * 2. Treat Notion Date date+time as wall-clock in that timezone.
+ * 3. Convert to UTC and store as `startsAt`.
+ * 4. On the card, format `startsAt` in the visitor's browser-local timezone.
+ */
 
-/** Capital / primary timezone for flag emoji at the start of Title. */
-const FLAG_TIMEZONES: Record<string, string> = {
+/** When Title has no flag emoji. */
+export const DEFAULT_EVENT_TIMEZONE = "Asia/Shanghai";
+
+/** Flag emoji at Title start → IANA timezone (capital / primary city). */
+export const FLAG_TIMEZONES: Record<string, string> = {
   "🇹🇭": "Asia/Bangkok",
   "🇨🇳": "Asia/Shanghai",
-  "🇫🇷": "Europe/Paris",
+  "🇭🇰": "Asia/Hong_Kong",
+  "🇲🇴": "Asia/Macau",
+  "🇹🇼": "Asia/Taipei",
   "🇰🇷": "Asia/Seoul",
-  "🇸🇬": "Asia/Singapore",
   "🇯🇵": "Asia/Tokyo",
-  "🇮🇹": "Europe/Rome",
+  "🇸🇬": "Asia/Singapore",
   "🇵🇭": "Asia/Manila",
   "🇻🇳": "Asia/Ho_Chi_Minh",
-  "🇲🇴": "Asia/Macau",
-  "🇭🇰": "Asia/Hong_Kong",
+  "🇫🇷": "Europe/Paris",
+  "🇮🇹": "Europe/Rome",
+  "🇬🇧": "Europe/London",
+  "🇩🇪": "Europe/Berlin",
+  "🇺🇸": "America/New_York",
+  "🇦🇺": "Australia/Sydney",
 };
 
 const TITLE_FLAG_PATTERN = /^(\uD83C[\uDDE6-\uDDFF]\uD83C[\uDDE6-\uDDFF])\s*/;
@@ -31,15 +44,13 @@ function formatTime12h(hour24: number, minute: number): string {
   return `${hour12}:${String(minute).padStart(2, "0")} ${period}`;
 }
 
-function parseWallClock(notionStart: string) {
+function parseNotionWallClock(notionStart: string) {
   const dateOnly = notionStart.match(/^(\d{4}-\d{2}-\d{2})$/);
   if (dateOnly) {
     return { date: dateOnly[1], hasTime: false as const };
   }
 
-  const withTime = notionStart.match(
-    /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/,
-  );
+  const withTime = notionStart.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/);
   if (!withTime) {
     return { date: notionStart.slice(0, 10), hasTime: false as const };
   }
@@ -52,7 +63,7 @@ function parseWallClock(notionStart: string) {
   };
 }
 
-/** Convert a wall-clock in `timeZone` to a UTC instant. */
+/** Wall-clock in `timeZone` → UTC instant. */
 function zonedLocalToUtc(
   isoDate: string,
   hour24: number,
@@ -91,17 +102,18 @@ function zonedLocalToUtc(
   return new Date(ms);
 }
 
-export function formatEventTimeLocal(
+/** Format UTC instant in the visitor's chosen or browser-local timezone. */
+export function formatEventTimeInBrowserLocal(
   startsAt: string | undefined,
   fallback = "TBA",
-  visitorTimeZone?: string,
+  timeZone?: string,
 ): string {
   if (!startsAt) return fallback;
   const instant = new Date(startsAt);
   if (Number.isNaN(instant.getTime())) return fallback;
 
-  return instant.toLocaleTimeString("en-US", {
-    timeZone: visitorTimeZone,
+  return instant.toLocaleTimeString(undefined, {
+    timeZone,
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
@@ -122,7 +134,7 @@ export function parseEventDateTimeFromNotion(
   }
 
   const eventTimeZone = getEventTimeZoneFromTitle(title);
-  const wallClock = parseWallClock(notionStart);
+  const wallClock = parseNotionWallClock(notionStart);
 
   if (!wallClock.hasTime) {
     return { date: wallClock.date, time: "TBA", eventTimeZone };
