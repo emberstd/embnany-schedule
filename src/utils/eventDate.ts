@@ -25,9 +25,15 @@ export function parseEventTimeMinutes(time: string): number {
 }
 
 export function sortEventsByTime(events: ScheduleEvent[]): ScheduleEvent[] {
-  return [...events].sort(
-    (a, b) => parseEventTimeMinutes(a.time) - parseEventTimeMinutes(b.time),
-  );
+  return [...events].sort((a, b) => {
+    const aMs = a.startsAt
+      ? new Date(a.startsAt).getTime()
+      : parseEventTimeMinutes(a.time);
+    const bMs = b.startsAt
+      ? new Date(b.startsAt).getTime()
+      : parseEventTimeMinutes(b.time);
+    return aMs - bMs;
+  });
 }
 
 /** One card per calendar day; events inside are ordered by time. */

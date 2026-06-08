@@ -9,6 +9,7 @@ import {
 } from "@/components/icons";
 import type { ScheduleEvent } from "@/types/schedule";
 import { isPastEventDate } from "@/utils/eventDate";
+import { formatEventTimeLocal } from "@/utils/eventTimezone";
 
 type EventCardProps = {
   date: string;
@@ -40,6 +41,8 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
   const hashtag = event.hashtag.trim();
   const showTrendingSection = Boolean(trendingKeyword || hashtag);
 
+  const displayTime = formatEventTimeLocal(event.startsAt, event.time);
+
   const locationContent = event.locationUrl ? (
     <a
       href={event.locationUrl}
@@ -60,13 +63,13 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
       </h2>
 
       <div className="mt-1.5 flex flex-col gap-1">
-        <div className="flex items-center gap-2 text-sm leading-snug text-white/75">
-          <ClockIcon className={`${INFO_ICON_CLASS} text-white/60`} />
-          <span>{event.time}</span>
+        <div className="flex items-start gap-2 text-sm leading-snug text-white/75">
+          <ClockIcon className={`${INFO_ICON_CLASS} mt-0.5 text-white/60`} />
+          <span suppressHydrationWarning>{displayTime}</span>
         </div>
 
-        <div className="flex items-center gap-2 text-sm leading-snug text-white/85">
-          <MapPinIcon className={`${INFO_ICON_CLASS} text-white/70`} />
+        <div className="flex items-start gap-2 text-sm leading-snug text-white/85">
+          <MapPinIcon className={`${INFO_ICON_CLASS} mt-0.5 text-white/70`} />
           <p className="min-w-0">{locationContent}</p>
         </div>
 
@@ -90,9 +93,9 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
       {showTrendingSection ? (
         <div className="mt-2 space-y-1">
           {trendingKeyword ? (
-            <div className="flex items-center gap-2 text-xs leading-snug text-white/80">
+            <div className="flex items-start gap-2 text-xs leading-snug text-white/80">
               <TrendingKeywordIcon
-                className={`${INFO_ICON_CLASS} object-contain`}
+                className={`${INFO_ICON_CLASS} mt-0.5 object-contain`}
               />
               <p className="min-w-0">{trendingKeyword}</p>
             </div>

@@ -2,7 +2,6 @@ import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoint
 import type { ScheduleEvent } from "@/types/schedule";
 import { isExcludedNotionType } from "@/lib/notion/excludedTypes";
 import {
-  getDateAndTime,
   getDisplayText,
   getGuests,
   getPlainText,
@@ -10,6 +9,7 @@ import {
   getSelectValue,
   getUrl,
 } from "@/lib/notion/extractors";
+import { parseEventDateTimeFromNotion } from "@/utils/eventTimezone";
 import { notionPropertyNames as props } from "@/lib/notion/propertyConfig";
 
 export function mapNotionPageToEvent(page: PageObjectResponse): ScheduleEvent | null {
@@ -21,15 +21,21 @@ export function mapNotionPageToEvent(page: PageObjectResponse): ScheduleEvent | 
   }
 
   const title = getPlainText(properties[props.title]);
-  const { date, time } = getDateAndTime(properties[props.date]);
+  const locationField = getRichTextWithLink(properties[props.location]);
+  const location = locationField.text || "TBA";
+  const locationUrl = locationField.url;
+
+  const dateProp = properties[props.date];
+  const notionStart =
+    dateProp?.type === "date" ? dateProp.date?.start : undefined;
+  const { date, time, startsAt, eventTimeZone } = parseEventDateTimeFromNotion(
+    notionStart,
+    title,
+  );
 
   if (!title || !date) {
     return null;
   }
-
-  const locationField = getRichTextWithLink(properties[props.location]);
-  const location = locationField.text || "TBA";
-  const locationUrl = locationField.url;
   const hashtagField = getRichTextWithLink(properties[props.hashtag]);
   const officialUrl =
     getUrl(properties[props.officialUrl]) || "https://example.com";
@@ -41,6 +47,8 @@ export function mapNotionPageToEvent(page: PageObjectResponse): ScheduleEvent | 
     location,
     locationUrl,
     time,
+    startsAt,
+    eventTimeZone,
     guests: getGuests(properties[props.guests]),
     trendingKeyword: getDisplayText(properties[props.trendingKeyword]),
     hashtag: hashtagField.text,

@@ -5,6 +5,10 @@ export type ScheduleEvent = {
   location: string;
   locationUrl?: string;
   time: string;
+  /** UTC ISO instant; used for local-time display and sorting. */
+  startsAt?: string;
+  /** IANA timezone inferred from the flag emoji at the start of Title. */
+  eventTimeZone?: string;
   guests: string[];
   trendingKeyword: string;
   hashtag: string;
