@@ -7,9 +7,9 @@ import {
   TrendingKeywordIcon,
   UsersIcon,
 } from "@/components/icons";
+import { EventTimeDisplay } from "@/components/EventTimeDisplay";
 import type { ScheduleEvent } from "@/types/schedule";
 import { isPastEventDate } from "@/utils/eventDate";
-import { formatEventTimeLocal } from "@/utils/eventTimezone";
 
 type EventCardProps = {
   date: string;
@@ -41,8 +41,6 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
   const hashtag = event.hashtag.trim();
   const showTrendingSection = Boolean(trendingKeyword || hashtag);
 
-  const displayTime = formatEventTimeLocal(event.startsAt, event.time);
-
   const locationContent = event.locationUrl ? (
     <a
       href={event.locationUrl}
@@ -65,7 +63,7 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
       <div className="mt-1.5 flex flex-col gap-1">
         <div className="flex items-start gap-2 text-sm leading-snug text-white/75">
           <ClockIcon className={`${INFO_ICON_CLASS} mt-0.5 text-white/60`} />
-          <span suppressHydrationWarning>{displayTime}</span>
+          <EventTimeDisplay startsAt={event.startsAt} fallback={event.time} />
         </div>
 
         <div className="flex items-start gap-2 text-sm leading-snug text-white/85">

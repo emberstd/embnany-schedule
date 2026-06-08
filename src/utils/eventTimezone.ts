@@ -1,5 +1,5 @@
 const DEFAULT_EVENT_TIMEZONE =
-  process.env.NOTION_TIMEZONE?.trim() || "Asia/Bangkok";
+  process.env.NOTION_TIMEZONE?.trim() || "Asia/Shanghai";
 
 /** Capital / primary timezone for flag emoji at the start of Title. */
 const FLAG_TIMEZONES: Record<string, string> = {
@@ -94,12 +94,14 @@ function zonedLocalToUtc(
 export function formatEventTimeLocal(
   startsAt: string | undefined,
   fallback = "TBA",
+  visitorTimeZone?: string,
 ): string {
   if (!startsAt) return fallback;
   const instant = new Date(startsAt);
   if (Number.isNaN(instant.getTime())) return fallback;
 
   return instant.toLocaleTimeString("en-US", {
+    timeZone: visitorTimeZone,
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
