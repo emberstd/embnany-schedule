@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePreferredTimezone } from "@/contexts/PreferredTimezoneContext";
-import { formatEventTimeInBrowserLocal } from "@/utils/eventTimezone";
+import { usePreferredTimezone } from "@schedule/contexts/PreferredTimezoneContext";
+import { formatEventTimeInBrowserLocal } from "@schedule/utils/eventTimezone";
 
 type EventTimeDisplayProps = {
   startsAt?: string;

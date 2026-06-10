@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
-import { MonthPicker } from "@/components/MonthPicker";
+import { ChevronLeftIcon, ChevronRightIcon } from "@schedule/components/icons";
+import { MonthPicker } from "@schedule/components/MonthPicker";
 
 type MonthNavigatorProps = {
   label: string;

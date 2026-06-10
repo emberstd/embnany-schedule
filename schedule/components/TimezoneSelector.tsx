@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { usePreferredTimezone } from "@/contexts/PreferredTimezoneContext";
-import { useNavigatorLocale } from "@/hooks/useNavigatorLocale";
+import { usePreferredTimezone } from "@schedule/contexts/PreferredTimezoneContext";
+import { useNavigatorLocale } from "@schedule/hooks/useNavigatorLocale";
 import {
   getEffectiveTimezoneLabel,
   STANDARD_TIMEZONE_OPTIONS,
-} from "@/utils/preferredTimezone";
-import { getTimezoneSelectorMessages } from "@/utils/timezoneSelectorI18n";
+} from "@schedule/utils/preferredTimezone";
+import { getTimezoneSelectorMessages } from "@schedule/utils/timezoneSelectorI18n";
 
 export function TimezoneSelector() {
   const { preferredTimeZone, effectiveTimeZone, setPreferredTimeZone } =

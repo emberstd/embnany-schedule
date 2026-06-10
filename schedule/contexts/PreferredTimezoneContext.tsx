@@ -14,7 +14,7 @@ import {
   resolveDisplayTimeZone,
   TIMEZONE_CHANGED_EVENT,
   writeStoredPreferredTimeZone,
-} from "@/utils/preferredTimezone";
+} from "@schedule/utils/preferredTimezone";
 
 type PreferredTimezoneContextValue = {
   /** User override from localStorage; null = follow browser/system. */

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@schedule/components/icons";
 
 const MONTHS = Array.from({ length: 12 }, (_, i) => i);
 

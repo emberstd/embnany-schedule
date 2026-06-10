@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { EventCard } from "@/components/EventCard";
-import { MonthNavigator } from "@/components/MonthNavigator";
-import { ScheduleHeader } from "@/components/ScheduleHeader";
-import type { CelebrityProfile, ScheduleEvent } from "@/types/schedule";
-import { groupEventsByDate, parseEventDate } from "@/utils/eventDate";
+import { EventCard } from "@schedule/components/EventCard";
+import { MonthNavigator } from "@schedule/components/MonthNavigator";
+import { ScheduleHeader } from "@schedule/components/ScheduleHeader";
+import type { CelebrityProfile, ScheduleEvent } from "@schedule/types/schedule";
+import { groupEventsByDate, parseEventDate } from "@schedule/utils/eventDate";
 
 type ScheduleViewProps = {
   profile: CelebrityProfile;

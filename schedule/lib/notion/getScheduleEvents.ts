@@ -1,7 +1,7 @@
 import { Client, isFullDatabase, isFullPage } from "@notionhq/client";
-import { mapNotionPageToEvent } from "@/lib/notion/mapPageToEvent";
-import { notionPropertyNames } from "@/lib/notion/propertyConfig";
-import type { ScheduleEvent } from "@/types/schedule";
+import { mapNotionPageToEvent } from "@schedule/lib/notion/mapPageToEvent";
+import { notionPropertyNames } from "@schedule/lib/notion/propertyConfig";
+import type { ScheduleEvent } from "@schedule/types/schedule";
 
 function sanitizeEnvValue(value: string): string {
   let trimmed = value.trim();

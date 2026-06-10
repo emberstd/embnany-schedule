@@ -6,10 +6,10 @@ import {
   TagHashtagIcon,
   TrendingKeywordIcon,
   UsersIcon,
-} from "@/components/icons";
-import { EventTimeDisplay } from "@/components/EventTimeDisplay";
-import type { ScheduleEvent } from "@/types/schedule";
-import { isPastEventDate } from "@/utils/eventDate";
+} from "@schedule/components/icons";
+import { EventTimeDisplay } from "@schedule/components/EventTimeDisplay";
+import type { ScheduleEvent } from "@schedule/types/schedule";
+import { isPastEventDate } from "@schedule/utils/eventDate";
 
 type EventCardProps = {
   date: string;
@@ -79,14 +79,16 @@ function EventCardEntry({ event }: { event: ScheduleEvent }) {
         ) : null}
       </div>
 
-      <a
-        href={event.officialUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="glass-button official-post-button mt-2 inline-flex w-fit items-center justify-center rounded-full px-4 py-1 text-xs font-semibold"
-      >
-        Official Post
-      </a>
+      {event.officialUrl.trim() ? (
+        <a
+          href={event.officialUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="glass-button official-post-button mt-2 inline-flex w-fit items-center justify-center rounded-full px-4 py-1 text-xs font-semibold"
+        >
+          Official Post
+        </a>
+      ) : null}
 
       {showTrendingSection ? (
         <div className="mt-2 space-y-1">

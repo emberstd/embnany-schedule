@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { CelebrityProfile } from "@/types/schedule";
+import type { CelebrityProfile } from "@schedule/types/schedule";
 
 type ScheduleHeaderProps = {
   profile: CelebrityProfile;

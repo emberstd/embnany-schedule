@@ -1,4 +1,4 @@
-import type { DayScheduleGroup, ScheduleEvent } from "@/types/schedule";
+import type { DayScheduleGroup, ScheduleEvent } from "@schedule/types/schedule";
 
 export function parseEventDate(isoDate: string) {
   return new Date(`${isoDate}T12:00:00`);

@@ -1,6 +1,6 @@
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import type { ScheduleEvent } from "@/types/schedule";
-import { isExcludedNotionType } from "@/lib/notion/excludedTypes";
+import type { ScheduleEvent } from "@schedule/types/schedule";
+import { isExcludedNotionType } from "@schedule/lib/notion/excludedTypes";
 import {
   getDisplayText,
   getGuests,
@@ -8,9 +8,9 @@ import {
   getRichTextWithLink,
   getSelectValue,
   getUrl,
-} from "@/lib/notion/extractors";
-import { parseEventDateTimeFromNotion } from "@/utils/eventTimezone";
-import { notionPropertyNames as props } from "@/lib/notion/propertyConfig";
+} from "@schedule/lib/notion/extractors";
+import { parseEventDateTimeFromNotion } from "@schedule/utils/eventTimezone";
+import { notionPropertyNames as props } from "@schedule/lib/notion/propertyConfig";
 
 export function mapNotionPageToEvent(page: PageObjectResponse): ScheduleEvent | null {
   const { properties } = page;
@@ -37,8 +37,7 @@ export function mapNotionPageToEvent(page: PageObjectResponse): ScheduleEvent | 
     return null;
   }
   const hashtagField = getRichTextWithLink(properties[props.hashtag]);
-  const officialUrl =
-    getUrl(properties[props.officialUrl]) || "https://example.com";
+  const officialUrl = getUrl(properties[props.officialUrl]) ?? "";
 
   return {
     id: page.id,

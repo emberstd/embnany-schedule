@@ -1,12 +1,12 @@
 import {
   STANDARD_TIMEZONE_IDS,
   getStandardTimezoneLabel,
-} from "@/data/standardTimezones";
+} from "@schedule/data/standardTimezones";
 
 export const USER_PREFERRED_TIMEZONE_KEY = "user_preferred_timezone";
 export const TIMEZONE_CHANGED_EVENT = "timezoneChanged";
 
-export { STANDARD_TIMEZONE_OPTIONS, getStandardTimezoneLabel } from "@/data/standardTimezones";
+export { STANDARD_TIMEZONE_OPTIONS, getStandardTimezoneLabel } from "@schedule/data/standardTimezones";
 
 export function isValidIanaTimeZone(timeZone: string): boolean {
   try {

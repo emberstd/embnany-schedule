@@ -1,6 +1,6 @@
 "use client";
 
-import { PreferredTimezoneProvider } from "@/contexts/PreferredTimezoneContext";
+import { PreferredTimezoneProvider } from "@schedule/contexts/PreferredTimezoneContext";
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return <PreferredTimezoneProvider>{children}</PreferredTimezoneProvider>;

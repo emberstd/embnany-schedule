@@ -1,4 +1,4 @@
-import type { CelebrityProfile, ScheduleEvent } from "@/types/schedule";
+import type { CelebrityProfile, ScheduleEvent } from "@schedule/types/schedule";
 
 export const profile: CelebrityProfile = {
   name: "EmiBonnie Schedule",

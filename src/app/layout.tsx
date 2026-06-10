@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { ClientProviders } from "@/components/ClientProviders";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "EmiBonnie Schedule",
-  description: "All events schedule for EmiBonnie",
+  title: "EmiBonnie & Any",
+  description: "EmiBonnie & Any — Schedule and Dashboard",
 };
 
 export default function RootLayout({
@@ -14,9 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-Hans" className="h-full antialiased">
-      <body className="flex min-h-dvh flex-col font-serif">
-        <ClientProviders>{children}</ClientProviders>
-      </body>
+      <body className="flex min-h-dvh flex-col font-serif">{children}</body>
     </html>
   );
 }
