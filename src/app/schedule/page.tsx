@@ -1,6 +1,5 @@
 import { BackToPortalButton } from "@schedule/components/BackToPortalButton";
 import { ScheduleView } from "@schedule/components/ScheduleView";
-import { SiteFooter } from "@schedule/components/SiteFooter";
 import { TimezoneSelector } from "@schedule/components/TimezoneSelector";
 import { VideoBackground } from "@/components/VideoBackground";
 import { events as mockEvents, profile } from "@schedule/data/mockSchedule";
@@ -43,7 +42,6 @@ export default async function SchedulePage() {
           )}
           <ScheduleView profile={profile} events={events} />
         </div>
-        <SiteFooter />
       </main>
     </>
   );
