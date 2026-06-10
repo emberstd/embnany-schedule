@@ -4,7 +4,8 @@ import {
   isNotionConfigured,
 } from "@schedule/lib/notion/getScheduleEvents";
 
-export const dynamic = "force-dynamic";
+/** Match /schedule page cache window for debugging API. */
+export const revalidate = 60;
 
 export async function GET() {
   if (!isNotionConfigured()) {

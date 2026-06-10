@@ -9,8 +9,8 @@ import {
   isNotionConfigured,
 } from "@schedule/lib/notion/getScheduleEvents";
 
-/** Always fetch fresh Notion data (avoid build-time mock cache on Vercel). */
-export const dynamic = "force-dynamic";
+/** Revalidate Notion data at most once per minute (ISR). */
+export const revalidate = 60;
 
 export default async function SchedulePage() {
   let events = mockEvents;
