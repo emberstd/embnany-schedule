@@ -1,8 +1,8 @@
 import type { CelebrityProfile, ScheduleEvent } from "@schedule/types/schedule";
 
 export const profile: CelebrityProfile = {
-  name: "EmiBonnie Schedule",
-  subtitle: "All Events Schedule for EmiBonnie",
+  name: "EmiBonnieAny Schedule",
+  subtitle: "All Events Schedule for MimiNini&Any",
   avatarSrc: "/04250127.jpg",
   avatarPosition: "65% center",
 };
