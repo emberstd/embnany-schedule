@@ -22,6 +22,17 @@ body {
   font-feature-settings: "liga" 1, "kern" 1;
 }
 
+/* Hide browser-native play overlays on background video */
+.video-background::-webkit-media-controls {
+  display: none !important;
+}
+
+.video-background::-webkit-media-controls-start-playback-button,
+.video-background::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 /* Shared Apple liquid glass */
 .glass-card {
   background: rgba(255, 255, 255, 0.16);
