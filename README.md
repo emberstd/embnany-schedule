@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EmiBonnie & Any
 
-## Getting Started
+Fan portal for **EmiBonnie & Any** — schedule, dashboard, and a cyberpunk-style landing page. Schedule data is sourced from Notion when configured.
 
-First, run the development server:
+## Stack
+
+- [Next.js 16](https://nextjs.org) (App Router)
+- Notion API (`@notionhq/client` v5)
+- Tailwind CSS v4
+- Deployed on [Vercel](https://vercel.com)
+
+## Getting started
 
 ```bash
+cp env.example .env.local
+# Add NOTION_API_KEY and NOTION_DATABASE_ID (see NOTION_SETUP.md)
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project layout
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Path | Purpose |
+|------|---------|
+| `src/app/` | Next.js routes (`/`, `/schedule`, `/dashboard`, `/api/schedule`) |
+| `src/portal/` | Portal home (title, nav cards, footer) |
+| `src/components/VideoBackground.tsx` | MP4 background with static poster fallback |
+| `schedule/` | Schedule module (Notion client, event cards, timezone picker) |
+| `schedule/data/mockSchedule.ts` | Mock events + schedule header profile copy |
+| `schedule/lib/notion/` | Server-side Notion fetch and mapping |
+| `public/` | Static assets (`background.mp4`, `background-poster.jpg`, icons) |
 
-## Learn More
+## Common edits
 
-To learn more about Next.js, take a look at the following resources:
+| What to change | File |
+|----------------|------|
+| Schedule page title / subtitle | `schedule/data/mockSchedule.ts` → `profile` |
+| Dashboard placeholder copy | `src/app/dashboard/page.tsx` |
+| Portal nav labels | `src/portal/PortalHome.tsx` |
+| Notion column names / exclusions | `.env.local` (see `NOTION_SETUP.md`) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Notion setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See **[NOTION_SETUP.md](./NOTION_SETUP.md)** for integration token, database sharing, column mapping, and deployment env vars.
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Push to GitHub and connect the repo on Vercel. Set `NOTION_API_KEY` and `NOTION_DATABASE_ID` in the project environment variables.

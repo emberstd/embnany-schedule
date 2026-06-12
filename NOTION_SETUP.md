@@ -61,15 +61,16 @@ cp env.example .env.local
 npm run dev
 ```
 
-未配置环境变量时，页面会继续使用 `src/data/mockSchedule.ts` 中的假数据。
+未配置环境变量时，页面会继续使用 `schedule/data/mockSchedule.ts` 中的假数据。
 
 ## 架构说明（推荐方案）
 
-本项目使用 **Next.js 服务端拉取**（`src/lib/notion/`），**不要**在浏览器里直接调用 Notion API：
+本项目使用 **Next.js 服务端拉取**（`schedule/lib/notion/`），**不要**在浏览器里直接调用 Notion API：
 
 - Notion API **不支持**浏览器跨域（CORS），纯前端 `fetch` 会失败。
 - Token 写在前端会泄露，任何人都能在源码里看到。
+- Schedule 页使用 **ISR**（`revalidate = 60`），Notion 数据最多约 1 分钟刷新一次，减轻 API 调用压力。
 
-可选调试接口：`GET /api/schedule`（同样走服务端，不暴露密钥）。
+可选调试接口：`GET /api/schedule`（同样走服务端，不暴露密钥，缓存窗口与页面一致）。
 
 部署到 Vercel 时，在 Project Settings → Environment Variables 添加 `NOTION_API_KEY` 与 `NOTION_DATABASE_ID`。
