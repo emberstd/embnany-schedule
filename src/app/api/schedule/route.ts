@@ -1,13 +1,11 @@
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import {
   getScheduleEventsFromNotion,
   isNotionConfigured,
 } from "@schedule/lib/notion/getScheduleEvents";
-
-/** Match /schedule page cache window for debugging API. */
-export const revalidate = 60;
 
 export async function GET() {
   if (!isNotionConfigured()) {

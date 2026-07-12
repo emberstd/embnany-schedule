@@ -8,8 +8,8 @@ import {
   isNotionConfigured,
 } from "@schedule/lib/notion/getScheduleEvents";
 
-/** Revalidate Notion data at most once per minute (ISR). */
-export const revalidate = 60;
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 export default async function SchedulePage() {
   let events = mockEvents;
