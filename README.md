@@ -53,7 +53,7 @@ If your project only has **Build command** + **Build output directory** (no Depl
 
 | Field | Value |
 |-------|-------|
-| Build command | `npx @cloudflare/next-on-pages@1` |
+| Build command | `npm run pages:build` |
 | Build output directory | `.vercel/output/static` |
 | Framework preset | None |
 
