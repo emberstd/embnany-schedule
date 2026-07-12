@@ -47,6 +47,8 @@ See **[NOTION_SETUP.md](./NOTION_SETUP.md)** for integration token, database sha
 
 ## Deploy (Cloudflare Pages)
 
+This project is **Cloudflare Pages only**. Build uses [`@cloudflare/next-on-pages`](https://github.com/cloudflare/next-on-pages).
+
 In [Cloudflare dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → your project → **Settings → Builds**:
 
 | Field | Value |
@@ -57,9 +59,9 @@ In [Cloudflare dashboard](https://dash.cloudflare.com/) → **Workers & Pages** 
 | Production branch | `main` |
 | Node.js version | **20** or **22** |
 
-Do **not** use `npx @cloudflare/next-on-pages@1` as the build command — use `npm run pages:build` so dependencies resolve correctly.
+**Important:** use `npm run pages:build` exactly. Do **not** use `npx @cloudflare/next-on-pages@1` — it can fail dependency resolution on Cloudflare CI.
 
-`wrangler.jsonc` enables `nodejs_compat` for Pages automatically. Do not edit it unless Cloudflare docs require a change.
+`wrangler.jsonc` enables `nodejs_compat` automatically. Do not remove it.
 
 **Environment variables** (Production + Preview):
 
@@ -67,5 +69,25 @@ Do **not** use `npx @cloudflare/next-on-pages@1` as the build command — use `n
 - `NOTION_DATABASE_ID` — 32-char database id
 
 Push to `main` to trigger a new deployment. Schedule data revalidates every 60 seconds (ISR).
+
+### Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| `Node.JS Compatibility Error` / `nodejs_compat` | Ensure `wrangler.jsonc` is in the repo and redeploy latest `main` |
+| `Missing script: "cf:deploy"` or `pages:build` | Cloudflare is building an old commit — wait for auto-deploy or push a new commit |
+| `ERESOLVE` during build | Build command must be `npm run pages:build`, not raw `npx` |
+| Site shows mock data | Add `NOTION_API_KEY` and `NOTION_DATABASE_ID` in Cloudflare env vars |
+
+### Verify build log
+
+A successful deployment should show:
+
+```
+HEAD is now at <latest-commit>
+Successfully read the Wrangler configuration file.
+Executing user command: npm run pages:build
+⚡️ Build completed
+```
 
 See **[NOTION_SETUP.md](./NOTION_SETUP.md)** for Notion column mapping and env var details.
