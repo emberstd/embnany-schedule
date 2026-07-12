@@ -11,7 +11,7 @@ type EventTimeDisplayProps = {
 
 /**
  * Renders event time in the user's preferred timezone (localStorage override)
- * or the browser system timezone. Client-only to avoid Vercel UTC SSR mismatch.
+ * or the browser system timezone. Client-only to avoid server UTC SSR mismatch.
  */
 export function EventTimeDisplay({ startsAt, fallback }: EventTimeDisplayProps) {
   const { effectiveTimeZone } = usePreferredTimezone();

@@ -88,7 +88,7 @@ function formatTime12h(hour24: number, minute: number): string {
 
 /**
  * Notion date.start includes the wall-clock time the user entered (often with +08:00).
- * Parse it literally instead of using the server timezone (Vercel runs in UTC).
+ * Parse it literally instead of using the server timezone (Cloudflare Workers run in UTC).
  */
 function parseNotionDateStart(start: string): { date: string; time: string } {
   const dateOnly = start.match(/^(\d{4}-\d{2}-\d{2})$/);
