@@ -47,23 +47,38 @@ See **[NOTION_SETUP.md](./NOTION_SETUP.md)** for integration token, database sha
 
 ## Deploy (Cloudflare)
 
-This project uses [OpenNext for Cloudflare](https://opennext.js.org/cloudflare). Do **not** use `next build` or `@cloudflare/next-on-pages` — use the scripts below.
+### Legacy Pages UI (current setup)
 
-### Connect GitHub (Workers Builds — recommended)
+If your project only has **Build command** + **Build output directory** (no Deploy command):
 
-1. [Cloudflare dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → connect this GitHub repo (`main`)
-2. **Build settings**
-   - **Build command:** `npm run cf:build`
-   - **Deploy command:** `npm run deploy`
-   - **Non-production branch deploy command:** `npm run upload`
-   - **Build output directory:** leave empty
-   - **Node.js version:** 20 or 22
-3. **Environment variables** (Production + Preview):
-   - `NOTION_API_KEY` — Notion integration secret
-   - `NOTION_DATABASE_ID` — 32-char database id
-4. Save and deploy. Schedule data revalidates every 60 seconds (ISR).
+| Field | Value |
+|-------|-------|
+| Build command | `npx @cloudflare/next-on-pages@1` |
+| Build output directory | `.vercel/output/static` |
+| Framework preset | None |
 
-If your project only has a single **Build command** field (legacy Pages UI), use `npm run cf:deploy` instead.
+`wrangler.jsonc` in the repo sets `nodejs_compat` for Pages automatically — do **not** use `npm run cf:deploy` here (that deploys a separate Worker, not your `*.pages.dev` site).
+
+After changing settings, push to `main` or use **Deployments → … → Retry deployment** on the latest commit.
+
+### Workers Builds (OpenNext — future migration)
+
+When your Cloudflare project has separate **Build** and **Deploy** commands:
+
+| Field | Value |
+|-------|-------|
+| Build command | `npm run cf:build` |
+| Deploy command | `npm run deploy` |
+| Non-production deploy command | `npm run upload` |
+| Build output directory | leave empty |
+
+Copy `wrangler.worker.jsonc` to `wrangler.jsonc` before using Workers Builds (see file comment in repo).
+
+**Environment variables** (Production + Preview):
+- `NOTION_API_KEY`
+- `NOTION_DATABASE_ID`
+
+Schedule data revalidates every 60 seconds (ISR).
 
 ### Local Cloudflare preview
 
