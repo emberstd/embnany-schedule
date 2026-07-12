@@ -7,7 +7,7 @@ Fan portal for **EmiBonnie & Any** — schedule, dashboard, and a cyberpunk-styl
 - [Next.js 16](https://nextjs.org) (App Router)
 - Notion API (`@notionhq/client` v5)
 - Tailwind CSS v4
-- Deployed on [Vercel](https://vercel.com)
+- Deployed on [Cloudflare Workers / Pages](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/) via [@opennextjs/cloudflare](https://opennext.js.org/cloudflare)
 
 ## Getting started
 
@@ -45,6 +45,38 @@ Open [http://localhost:3000](http://localhost:3000).
 
 See **[NOTION_SETUP.md](./NOTION_SETUP.md)** for integration token, database sharing, column mapping, and deployment env vars.
 
-## Deploy
+## Deploy (Cloudflare)
 
-Push to GitHub and connect the repo on Vercel. Set `NOTION_API_KEY` and `NOTION_DATABASE_ID` in the project environment variables.
+This project uses [OpenNext for Cloudflare](https://opennext.js.org/cloudflare). Do **not** use `next build` or `@cloudflare/next-on-pages` — use the scripts below.
+
+### Connect GitHub (Workers Builds — recommended)
+
+1. [Cloudflare dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → connect this GitHub repo (`main`)
+2. **Build settings**
+   - **Build command:** `npm run cf:build`
+   - **Deploy command:** `npm run deploy`
+   - **Non-production branch deploy command:** `npm run upload`
+   - **Build output directory:** leave empty
+   - **Node.js version:** 20 or 22
+3. **Environment variables** (Production + Preview):
+   - `NOTION_API_KEY` — Notion integration secret
+   - `NOTION_DATABASE_ID` — 32-char database id
+4. Save and deploy. Schedule data revalidates every 60 seconds (ISR).
+
+If your project only has a single **Build command** field (legacy Pages UI), use `npm run cf:deploy` instead.
+
+### Local Cloudflare preview
+
+```bash
+cp env.example .env.local   # Notion vars for next dev
+npm run cf:preview          # builds + runs local Workers runtime
+```
+
+### CLI deploy (optional)
+
+```bash
+npx wrangler login
+npm run cf:deploy
+```
+
+See **[NOTION_SETUP.md](./NOTION_SETUP.md)** for Notion column mapping and env var details.

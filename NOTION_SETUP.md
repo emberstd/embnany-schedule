@@ -73,4 +73,4 @@ npm run dev
 
 可选调试接口：`GET /api/schedule`（同样走服务端，不暴露密钥，缓存窗口与页面一致）。
 
-部署到 Vercel 时，在 Project Settings → Environment Variables 添加 `NOTION_API_KEY` 与 `NOTION_DATABASE_ID`。
+部署到 Cloudflare 时，在 Workers Builds / Pages 项目的 **Environment variables**（Production + Preview）添加 `NOTION_API_KEY` 与 `NOTION_DATABASE_ID`。
