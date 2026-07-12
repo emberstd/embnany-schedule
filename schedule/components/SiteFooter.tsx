@@ -9,7 +9,7 @@ export function SiteFooter() {
           rel="noopener noreferrer"
           className="normal-case tracking-normal text-white/70 transition hover:text-white"
         >
-          CUNICORNW_TD
+          Embers TD
         </a>
       </p>
     </footer>

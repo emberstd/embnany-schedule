@@ -16,6 +16,11 @@ const PORTAL_CARDS = [
     label: "Dashboard",
     icon: portalIcon("/icons/dashboard-chart.png"),
   },
+  {
+    href: "/portfolio",
+    label: "Portfolio",
+    icon: portalIcon("/icons/portfolio-sparkle.png"),
+  },
 ] as const;
 
 export function PortalHome() {
