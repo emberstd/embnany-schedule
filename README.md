@@ -55,8 +55,11 @@ In [Cloudflare dashboard](https://dash.cloudflare.com/) → **Workers & Pages** 
 | Build command | `npm run pages:build` |
 | Build output directory | `.vercel/output/static` |
 | Production branch | `main` |
+| Node.js version | **20** or **22** |
 
-`wrangler.jsonc` in the repo enables `nodejs_compat` automatically — do not change it.
+Do **not** use `npx @cloudflare/next-on-pages@1` as the build command — use `npm run pages:build` so dependencies resolve correctly.
+
+`wrangler.jsonc` enables `nodejs_compat` for Pages automatically. Do not edit it unless Cloudflare docs require a change.
 
 **Environment variables** (Production + Preview):
 
