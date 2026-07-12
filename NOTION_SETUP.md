@@ -69,7 +69,7 @@ npm run dev
 
 - Notion API **不支持**浏览器跨域（CORS），纯前端 `fetch` 会失败。
 - Token 写在前端会泄露，任何人都能在源码里看到。
-- Schedule 页使用 **ISR**（`revalidate = 60`），Notion 数据最多约 1 分钟刷新一次，减轻 API 调用压力。
+- Schedule 页在浏览器中通过 `/api/schedule` **实时拉取** Notion 数据（`cache: no-store`），避免 Cloudflare Pages 构建时静态快照导致的数据过期。
 
 可选调试接口：`GET /api/schedule`（同样走服务端，不暴露密钥，缓存窗口与页面一致）。
 

@@ -68,7 +68,7 @@ In [Cloudflare dashboard](https://dash.cloudflare.com/) → **Workers & Pages** 
 - `NOTION_API_KEY` — Notion integration secret
 - `NOTION_DATABASE_ID` — 32-char database id
 
-Push to `main` to trigger a new deployment. Schedule data revalidates every 60 seconds (ISR).
+Push to `main` to trigger a new deployment. Schedule data loads live from Notion on each visit via `/api/schedule`.
 
 ### Troubleshooting
 
