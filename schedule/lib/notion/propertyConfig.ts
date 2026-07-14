@@ -7,5 +7,4 @@ export const notionPropertyNames = {
     process.env.NOTION_PROP_KEYWORD ?? "Trending Keyword",
   hashtag: process.env.NOTION_PROP_HASHTAG ?? "Hashtag",
   officialUrl: process.env.NOTION_PROP_OFFICIAL_URL ?? "Official Post",
-  type: process.env.NOTION_PROP_TYPE ?? "Type",
 } as const;

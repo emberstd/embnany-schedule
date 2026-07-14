@@ -39,7 +39,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | Schedule page title / subtitle | `schedule/data/mockSchedule.ts` → `profile` |
 | Dashboard placeholder copy | `src/app/dashboard/page.tsx` |
 | Portal nav labels | `src/portal/PortalHome.tsx` |
-| Notion column names / exclusions | `.env.local` (see `NOTION_SETUP.md`) |
+| Notion column names | `.env.local` (see `NOTION_SETUP.md`) |
 
 ## Notion setup
 

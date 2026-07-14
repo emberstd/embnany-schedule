@@ -27,21 +27,6 @@
 | Trending Keyword | Text                | 横线下第一行关键词          |
 | Hashtag          | Text（Rich text）     | 话题标签（可带 `#`）；在文字上添加链接后，网站标签可点击跳转；无链接则纯展示 |
 | Official Post    | URL                 | 官方链接               |
-| Type             | Select              | 活动类型；指定类型不会出现在网站上（见下方） |
-
-### 按 Type 隐藏活动
-
-Notion 的**视图筛选**不会自动同步到网站 API，需要在 `.env.local` 配置要排除的类型：
-
-```bash
-# 默认已排除「聊天直播」；多个类型用英文逗号分隔
-NOTION_EXCLUDE_TYPES=聊天直播,其他不想显示的类型
-
-# 若要在网站上显示全部类型（包括聊天直播）
-NOTION_EXCLUDE_TYPES=
-```
-
-列名若不是 `Type`，可设置 `NOTION_PROP_TYPE=你的列名`。
 
 ### People 多选标签设置
 

@@ -1,12 +1,10 @@
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import type { ScheduleEvent } from "@schedule/types/schedule";
-import { isExcludedNotionType } from "@schedule/lib/notion/excludedTypes";
 import {
   getDisplayText,
   getGuests,
   getPlainText,
   getRichTextWithLink,
-  getSelectValue,
   getUrl,
 } from "@schedule/lib/notion/extractors";
 import { parseEventDateTimeFromNotion } from "@schedule/utils/eventTimezone";
@@ -14,11 +12,6 @@ import { notionPropertyNames as props } from "@schedule/lib/notion/propertyConfi
 
 export function mapNotionPageToEvent(page: PageObjectResponse): ScheduleEvent | null {
   const { properties } = page;
-
-  const eventType = getSelectValue(properties[props.type]);
-  if (isExcludedNotionType(eventType)) {
-    return null;
-  }
 
   const title = getPlainText(properties[props.title]);
   const locationField = getRichTextWithLink(properties[props.location]);
