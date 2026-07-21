@@ -15,7 +15,7 @@
 
 1. 在 [My integrations](https://www.notion.so/my-integrations) 创建集成。
 2. 打开你的 **Database** 页面 → 右上角 `···` → **Connections** → 连接刚创建的集成（否则 API 返回 404）。
-3. 建议数据库属性名与下表一致（可在 `.env.local` 用 `NOTION_PROP_`* 改成你的列名）：
+3. 建议数据库属性名与下表一致（可在 `.env` 里用 `NOTION_PROP_*` 改成你的列名）：
 
 
 | 属性名（默认）          | 类型                  | 说明                 |
@@ -34,17 +34,34 @@
 2. 为每位常出现的嘉宾预先添加选项（如 `Emi Thasorn`、`Bonnie Dolnun`），或输入新名字时 Notion 会自动创建标签。
 3. 每条活动勾选当天到场的嘉宾即可；网站会按 Notion 中的选择顺序，用 ` / ` 显示在卡片上。
 
-若你的列名不是 `People`（例如 `Guests`、`姓名`），在 `.env.local` 设置：
+若你的列名不是 `People`（例如 `Guests`、`姓名`），在 `.env` 设置：
 
 ```bash
 NOTION_PROP_GUESTS=你的列名
 ```
 
+## 本地开发环境变量
+
+**永远把 Token 放在项目根目录的 `.env` 文件里**（已加入 `.gitignore`，不会被提交到 Git）：
+
 ```bash
-cp env.example .env.local
-# 编辑 .env.local，填入 NOTION_API_KEY 和 NOTION_DATABASE_ID
+cp env.example .env
+# 编辑 .env，填入 NOTION_API_KEY 和 NOTION_DATABASE_ID
 npm run dev
 ```
+
+修改 `.env` 后需要**重启** `npm run dev` 才会生效。
+
+## 部署环境变量（Cloudflare Pages）
+
+本地 `.env` **不会**随代码部署。上线时请在 Cloudflare 控制台配置相同变量：
+
+**Cloudflare Dashboard → Workers & Pages → 你的项目 → Settings → Environment variables**
+
+为 **Production** 和 **Preview** 都添加：
+
+- `NOTION_API_KEY`
+- `NOTION_DATABASE_ID`
 
 未配置环境变量时，页面会继续使用 `schedule/data/mockSchedule.ts` 中的假数据。
 
@@ -57,5 +74,3 @@ npm run dev
 - Schedule 页在浏览器中通过 `/api/schedule` **实时拉取** Notion 数据（`cache: no-store`），避免 Cloudflare Pages 构建时静态快照导致的数据过期。
 
 可选调试接口：`GET /api/schedule`（同样走服务端，不暴露密钥，缓存窗口与页面一致）。
-
-部署到 Cloudflare Pages 时，在项目的 **Settings → Environment variables**（Production + Preview）添加 `NOTION_API_KEY` 与 `NOTION_DATABASE_ID`。

@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "EmiBonnie & Any",
-  description: "EmiBonnie & Any — Schedule and Dashboard",
+  description: "EmiBonnie & Any — Schedule and Portfolio",
 };
 
 export default function RootLayout({

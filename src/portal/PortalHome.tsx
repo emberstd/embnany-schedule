@@ -12,11 +12,6 @@ const PORTAL_CARDS = [
     icon: portalIcon("/icons/schedule-megaphone.png"),
   },
   {
-    href: "/dashboard",
-    label: "Dashboard",
-    icon: portalIcon("/icons/dashboard-chart.png"),
-  },
-  {
     href: "/portfolio",
     label: "Portfolio",
     icon: portalIcon("/icons/portfolio-sparkle.png"),

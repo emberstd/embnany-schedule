@@ -2,7 +2,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto shrink-0 px-4 pb-8 pt-6 text-center">
       <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/45">
-        Created purely out of love to support and preserve every precious moment. –{" "}
+      DESIGNED & DEVELOPED BY {" "}
         <a
           href="https://x.com/cunicornw_td?s=21"
           target="_blank"
